@@ -6,7 +6,7 @@ function onErr(err) {
 };
 
 var grid = [
-    ["X", " ", " ", " ", " ", " ", " ", " ", " ", " "],
+    ["N", " ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " ", " ", " ", " ", " ", " "],
@@ -33,36 +33,58 @@ var rover = {
     y: 0,
     travelLog: [],
 };
-
+/*
+if (rover.direction === "N") {
+    grid[rover.x][rover.y] = "N"
+}
+else if (rover.direction === "W") {
+    grid[rover.x][rover.y] = "W"
+}
+else if (rover.direction === "S") {
+    grid[rover.x][rover.y] = "S"
+}
+else if (rover.direction === "E") {
+    grid[rover.x][rover.y] = "E"
+}
+*/
 
 function turnLeft() {
 
     if (rover.direction === "N") {
         rover.direction = "W";
+        grid[rover.x][rover.y] = "W"
+
     }
     else if (rover.direction === "W") {
         rover.direction = "S";
+        grid[rover.x][rover.y] = "S"
     }
     else if (rover.direction === "S") {
         rover.direction = "E";
+        grid[rover.x][rover.y] = "E"
     }
     else if (rover.direction === "E") {
         rover.direction = "N";
+        grid[rover.x][rover.y] = "N"
     }
 };
 
 function turnRight() {
     if (rover.direction === "N") {
         rover.direction = "E";
+        grid[rover.x][rover.y] = "E"
     }
     else if (rover.direction === "E") {
         rover.direction = "S";
+        grid[rover.x][rover.y] = "S"
     }
     else if (rover.direction === "S") {
         rover.direction = "W";
+        grid[rover.x][rover.y] = "W"
     }
     else if (rover.direction === "W") {
         rover.direction = "N";
+        grid[rover.x][rover.y] = "W"
     }
 };
 
@@ -94,24 +116,6 @@ function moveForward() {
     console.log(grid);
 };
 
-/*
-function faceDirection() {
-    var x = rover.x
-    var y = rover.y
-    if (rover.direction === "N") {
-        grid[x][y] = "N"
-    } else
-        if (rover.direction === "E") {
-            grid[x][y] = "E"
-        } else
-            if (rover.direction === "S") {
-                grid[x][y] = "S"
-            } else
-                if (rover.direction === "W") {
-                    grid[x][y] = "W"
-                }
-}
-*/
 
 function pilotRover() {
     prompt.get({
@@ -138,7 +142,8 @@ function pilotRover() {
                 console.log("rover is moving forward");
                 rover.travelLog = [rover.x, rover.y];
                 moveForward(rover);
-                console.log(rover);
+                console.log("previous location: ", rover.travelLog)
+                console.log("current location: ", rover);
                 pilotRover();
             } else {
                 console.log("error. Only r/l/f")
