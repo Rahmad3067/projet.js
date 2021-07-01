@@ -26,7 +26,6 @@ var rover = {
 };
 
 function turnLeft() {
-
     if (rover.direction === "N") {
         rover.direction = "W";
     }
@@ -39,6 +38,7 @@ function turnLeft() {
     else if (rover.direction === "E") {
         rover.direction = "N";
     }
+    grid[rover.y][rover.x] = rover.direction;
 };
 
 function turnRight() {
@@ -54,13 +54,14 @@ function turnRight() {
     else if (rover.direction === "W") {
         rover.direction = "N";
     }
+    grid[rover.y][rover.x] = rover.direction; //changes the direction of the rover
 };
 
 function moveForward() {
     if (rover.direction === "N" && rover.y > 0) {
         rover.y--;
-        grid[rover.y][rover.x] = rover.direction;
-        grid[rover.travelLog[0]][rover.travelLog[1]] = " ";
+        grid[rover.y][rover.x] = rover.direction; //moves the rover
+        grid[rover.travelLog[0]][rover.travelLog[1]] = " "; //empties the previous location
     }
     else if (rover.direction === "E" && rover.x < 9) {
         rover.x++;
@@ -78,83 +79,68 @@ function moveForward() {
         grid[rover.travelLog[0]][rover.travelLog[1]] = " ";
     } else {
         console.log("error: can't move further");
+        grid[rover.travelLog[0]][rover.travelLog[1]] = rover.direction; //stops at the edge
     }
-    console.log(grid);
 };
 
+function moveBackward() {
+    if (rover.direction === "N" && rover.y < 9) {
+        rover.y++;
+        grid[rover.y][rover.x] = rover.direction;
+        grid[rover.travelLog[0]][rover.travelLog[1]] = " "; 
+    }
+    else if (rover.direction === "E" && rover.x > 0) {
+        rover.x--;
+        grid[rover.y][rover.x] = rover.direction;
+        grid[rover.travelLog[0]][rover.travelLog[1]] = " ";
+    }
+    else if (rover.direction === "S" && rover.y > 0) {
+        rover.y--;
+        grid[rover.y][rover.x] = rover.direction;
+        grid[rover.travelLog[0]][rover.travelLog[1]] = " ";
+    }
+    else if (rover.direction === "W" && rover.x < 9) {
+        rover.x++;
+        grid[rover.y][rover.x] = rover.direction;
+        grid[rover.travelLog[0]][rover.travelLog[1]] = " ";
+    } else {
+        console.log("error");
+        grid[rover.travelLog[0]][rover.travelLog[1]] = rover.direction;
+    }
+};
 
 function pilotRover() {
     prompt.get({
         name: "str",
-        description: "r or l or f",
+        description: "press r/l/f/b",
     },
         function (err, res) {
-            if (err) {
-                return onErr(err);
+            for (let i = 0 ; i < res.str.length ; i++) {
+                if (err) {
+                    return onErr(err);
+                }
+                else if (res.str[i] === "r") {
+                    turnRight(rover);
+                }
+                else if (res.str[i] === "l") {
+                    turnLeft(rover);
+                } 
+                else if (res.str[i] === "f") {
+                    rover.travelLog = [rover.y, rover.x]; //saves the position of the rover before moving
+                    moveForward(rover);
+                } else if (res.str[i] === "b") {
+                    rover.travelLog = [rover.y, rover.x]; //saves the position of the rover before moving
+                    moveBackward(rover);
+                } else {
+                    console.log("error. Only r/l/f/b")
+                }
             }
-            else if (res.str === "r") {
-                console.log("rover is turning right");
-                turnRight(rover);
-                console.log(rover);
-                pilotRover();
-            }
-            else if (res.str === "l") {
-                console.log("rover is turning left");
-                turnLeft(rover);
-                console.log(rover);
-                pilotRover();
-            }
-            else if (res.str === "f") {
-                console.log("rover is moving forward");
-                rover.travelLog = [rover.y, rover.x];
-                moveForward(rover);
-                console.log("previous location: ", rover.travelLog)
-                console.log("current location: ", rover);
-                pilotRover();
-            } else {
-                console.log("error. Only r/l/f")
-                pilotRover();
-            }
+            console.log(grid);
+            console.log("previous position : ", rover.travelLog);
+            console.log("current position : ", rover);
+            pilotRover();
+            
         }
     )
 };
 pilotRover();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
